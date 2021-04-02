@@ -1,0 +1,14 @@
+{
+  "taps": [
+    {
+      "unixTimestamp": 1,
+      "customerId": 2,
+      "station": "A"
+    },
+    {
+      "unixTimestamp": 2,
+      "customerId": 2,
+      "station": "E"
+    }
+  ]
+}

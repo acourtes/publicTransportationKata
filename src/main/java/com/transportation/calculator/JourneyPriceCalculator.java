@@ -19,12 +19,13 @@ public class JourneyPriceCalculator {
     public CustomersSummaries getCustomersSummaries() {
         var firstTap = customersJourneys.tapsList().get(0);
         var startStation = firstTap.station();
+        var customerId = firstTap.customerId();
         var secondTap = customersJourneys.tapsList().get(1);
         var endStation = secondTap.station();
 
         var trip = new Trip(startStation, endStation, 1, 240,
                 startStation.zoneNumber, endStation.zoneNumber);
-        var customersSummary = new CustomersSummary(1, 240, List.of(trip));
+        var customersSummary = new CustomersSummary(customerId, 240, List.of(trip));
 
         return new CustomersSummaries(List.of(customersSummary));
     }
