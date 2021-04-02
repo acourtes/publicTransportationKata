@@ -107,6 +107,20 @@ public class JourneyPriceCalculatorTest {
         checkResult(expectedPrice, result, Stations.A, Stations.E, 1, 3);
     }
 
+    @Test
+    void should_return_200_for_a_journey_in_zone_3_and_4_between_F_and_G_stations() {
+        var inputFile = TestUtils.getFile("calculator/zones_3_and_4_F_and_G_stations.json");
+        var customersJourneys = CustomersInputMapper.from(inputFile).getCustomersJourneys();
+        var expectedPrice = 200;
+
+        CustomersSummaries result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
+
+        assertThat(result).isNotNull();
+        assertThat(result.customersSummariesList()).hasSize(1);
+
+        checkResult(expectedPrice, result, Stations.F, Stations.G, 1, 1);
+    }
+
     private void checkResult(int expectedPrice, CustomersSummaries result,
                              Stations stationStart, Stations stationEnd,
                              int expectedCustomerId, int expectedStartedJourney) {
