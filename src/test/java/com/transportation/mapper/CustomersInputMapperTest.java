@@ -1,5 +1,6 @@
 package com.transportation.mapper;
 
+import com.transportation.TestUtils;
 import com.transportation.mapper.model.Tap;
 import com.transportation.mapper.model.Taps;
 import org.assertj.core.api.SoftAssertions;
@@ -13,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CustomersInputMapperTest {
 
     @Test
-    void should_read_input_file_and_create_a_Taps_object() throws IOException {
-        File inputCustomerFile = getFile("inputSamples/simpleInput.json");
+    void should_read_input_file_and_create_a_Taps_object() {
+        File inputCustomerFile = TestUtils.getFile("inputSamples/simpleInput.json");
 
         final Taps result = CustomersInputMapper.from(inputCustomerFile).getCustomersJourneys();
 
@@ -30,8 +31,8 @@ public class CustomersInputMapperTest {
     }
 
     @Test
-    void should_read_input_file_and_create_a_Taps_object_even_when_input_file_has_unknown_fields() throws IOException {
-        File inputCustomerFile = getFile("inputSamples/simpleInputWithUnknownField.json");
+    void should_read_input_file_and_create_a_Taps_object_even_when_input_file_has_unknown_fields() {
+        File inputCustomerFile = TestUtils.getFile("inputSamples/simpleInputWithUnknownField.json");
 
         final Taps result = CustomersInputMapper.from(inputCustomerFile).getCustomersJourneys();
 
@@ -39,10 +40,4 @@ public class CustomersInputMapperTest {
         assertThat(result.tapsList()).hasSize(2);
     }
 
-    private File getFile(String fileNameWithPath) {
-        var filePath = CustomersInputMapperTest.class.getClassLoader()
-                .getResource(fileNameWithPath).getFile();
-
-        return new File(filePath);
-    }
 }

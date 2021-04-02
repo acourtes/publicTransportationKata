@@ -22,7 +22,12 @@ public class CustomersInputMapper {
         return new CustomersInputMapper(inputCustomerJsonFile);
     }
 
-    public Taps getCustomersJourneys() throws IOException {
-        return MAPPER.readValue(inputCustomerJsonFile, Taps.class);
+    public Taps getCustomersJourneys() {
+        try {
+            return MAPPER.readValue(inputCustomerJsonFile, Taps.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
