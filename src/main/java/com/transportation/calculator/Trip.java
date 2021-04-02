@@ -1,5 +1,7 @@
 package com.transportation.calculator;
 
-public record Trip(String stationStart, String stationEnd, int startedJourneyAt,
+import com.transportation.mapper.model.Stations;
+
+public record Trip(Stations stationStart, Stations stationEnd, int startedJourneyAt,
                    int costInCents, int zoneFrom, int zoneTo) {
 }

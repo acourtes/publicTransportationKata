@@ -1,4 +1,4 @@
 package com.transportation.mapper.model;
 
-public record Tap(int unixTimestamp, int customerId, String station) {
+public record Tap(int unixTimestamp, int customerId, Stations station) {
 }

@@ -1,13 +1,13 @@
 package com.transportation.mapper;
 
 import com.transportation.TestUtils;
+import com.transportation.mapper.model.Stations;
 import com.transportation.mapper.model.Tap;
 import com.transportation.mapper.model.Taps;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,8 +23,8 @@ public class CustomersInputMapperTest {
         assertThat(result.tapsList()).hasSize(2);
 
         var should = new SoftAssertions();
-        var firstElement = new Tap(1, 1, "A");
-        var secondElement = new Tap(2, 1, "D");
+        var firstElement = new Tap(1, 1, Stations.A);
+        var secondElement = new Tap(2, 1, Stations.D);
         should.assertThat(result.tapsList().get(0)).isEqualTo(firstElement);
         should.assertThat(result.tapsList().get(1)).isEqualTo(secondElement);
         should.assertAll();

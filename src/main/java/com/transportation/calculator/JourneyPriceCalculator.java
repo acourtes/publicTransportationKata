@@ -22,8 +22,8 @@ public class JourneyPriceCalculator {
         var secondTap = customersJourneys.tapsList().get(1);
         var endStation = secondTap.station();
 
-        var zoneTo = endStation.equals("D") ? 2 : 1;
-        var trip = new Trip(startStation, endStation, 1, 240, 1, zoneTo);
+        var trip = new Trip(startStation, endStation, 1, 240,
+                startStation.zoneNumber, endStation.zoneNumber);
         var customersSummary = new CustomersSummary(1, 240, List.of(trip));
 
         return new CustomersSummaries(List.of(customersSummary));
