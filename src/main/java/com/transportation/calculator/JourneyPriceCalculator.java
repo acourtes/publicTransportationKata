@@ -20,10 +20,11 @@ public class JourneyPriceCalculator {
         var firstTap = customersJourneys.tapsList().get(0);
         var startStation = firstTap.station();
         var customerId = firstTap.customerId();
+        var startedJourneyAt = firstTap.unixTimestamp();
         var secondTap = customersJourneys.tapsList().get(1);
         var endStation = secondTap.station();
 
-        var trip = new Trip(startStation, endStation, 1, 240,
+        var trip = new Trip(startStation, endStation, startedJourneyAt, 240,
                 startStation.zoneNumber, endStation.zoneNumber);
         var customersSummary = new CustomersSummary(customerId, 240, List.of(trip));
 

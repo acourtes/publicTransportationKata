@@ -34,7 +34,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customersSummariesList()).hasSize(1);
 
-        checkResult(expectedPrice, result, Stations.A, Stations.B, 1);
+        checkResult(expectedPrice, result, Stations.A, Stations.B, 1, 1);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customersSummariesList()).hasSize(1);
 
-        checkResult(expectedPrice, result, Stations.B, Stations.A, 1);
+        checkResult(expectedPrice, result, Stations.B, Stations.A, 1, 1);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customersSummariesList()).hasSize(1);
 
-        checkResult(expectedPrice, result, Stations.A, Stations.D, 1);
+        checkResult(expectedPrice, result, Stations.A, Stations.D, 1, 1);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customersSummariesList()).hasSize(1);
 
-        checkResult(expectedPrice, result, Stations.A, Stations.E, 1);
+        checkResult(expectedPrice, result, Stations.A, Stations.E, 1, 1);
     }
 
     @Test
@@ -90,11 +90,26 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customersSummariesList()).hasSize(1);
 
-        checkResult(expectedPrice, result, Stations.A, Stations.E, 2);
+        checkResult(expectedPrice, result, Stations.A, Stations.E, 2, 1);
+    }
+
+    @Test
+    void should_return_240_for_a_journey_in_zones_1_and_2_between_A_and_E_stations_with_started_journey_at_3() {
+        var inputFile = TestUtils.getFile("calculator/zones_1_and_2_A_and_E_stations_with_start_time_at_3.json");
+        var customersJourneys = CustomersInputMapper.from(inputFile).getCustomersJourneys();
+        var expectedPrice = 240;
+
+        CustomersSummaries result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
+
+        assertThat(result).isNotNull();
+        assertThat(result.customersSummariesList()).hasSize(1);
+
+        checkResult(expectedPrice, result, Stations.A, Stations.E, 1, 3);
     }
 
     private void checkResult(int expectedPrice, CustomersSummaries result,
-                             Stations stationStart, Stations stationEnd, int expectedCustomerId) {
+                             Stations stationStart, Stations stationEnd,
+                             int expectedCustomerId, int expectedStartedJourney) {
         var customersSummary = result.customersSummariesList().get(0);
         should.assertThat(customersSummary.customerId()).isEqualTo(expectedCustomerId);
         should.assertThat(customersSummary.totalCostInCents()).isEqualTo(expectedPrice);
@@ -103,7 +118,7 @@ public class JourneyPriceCalculatorTest {
         var trip = customersSummary.trips().get(0);
         should.assertThat(trip.stationStart()).isEqualTo(stationStart);
         should.assertThat(trip.stationEnd()).isEqualTo(stationEnd);
-        should.assertThat(trip.startedJourneyAt()).isEqualTo(1);
+        should.assertThat(trip.startedJourneyAt()).isEqualTo(expectedStartedJourney);
         should.assertThat(trip.costInCents()).isEqualTo(expectedPrice);
         should.assertThat(trip.zoneFrom()).isEqualTo(stationStart.zoneNumber);
         should.assertThat(trip.zoneTo()).isEqualTo(stationEnd.zoneNumber);
