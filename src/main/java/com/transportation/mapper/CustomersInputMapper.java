@@ -1,5 +1,6 @@
 package com.transportation.mapper;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transportation.mapper.model.Taps;
 
@@ -17,6 +18,7 @@ public class CustomersInputMapper {
     }
 
     public static CustomersInputMapper from(File inputCustomerJsonFile) {
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return new CustomersInputMapper(inputCustomerJsonFile);
     }
 

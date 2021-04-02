@@ -14,9 +14,7 @@ public class CustomersInputMapperTest {
 
     @Test
     void should_read_input_file_and_create_a_Taps_object() throws IOException {
-        var filePath = CustomersInputMapperTest.class.getClassLoader()
-                .getResource("inputSamples/simpleInput.json").getFile();
-        var inputCustomerFile = new File(filePath);
+        File inputCustomerFile = getFile("inputSamples/simpleInput.json");
 
         final Taps result = CustomersInputMapper.from(inputCustomerFile).getCustomersJourneys();
 
@@ -29,5 +27,22 @@ public class CustomersInputMapperTest {
         should.assertThat(result.tapsList().get(0)).isEqualTo(firstElement);
         should.assertThat(result.tapsList().get(1)).isEqualTo(secondElement);
         should.assertAll();
+    }
+
+    @Test
+    void should_read_input_file_and_create_a_Taps_object_even_when_input_file_has_unknown_fields() throws IOException {
+        File inputCustomerFile = getFile("inputSamples/simpleInputWithUnknownField.json");
+
+        final Taps result = CustomersInputMapper.from(inputCustomerFile).getCustomersJourneys();
+
+        assertThat(result).isNotNull();
+        assertThat(result.tapsList()).hasSize(2);
+    }
+
+    private File getFile(String fileNameWithPath) {
+        var filePath = CustomersInputMapperTest.class.getClassLoader()
+                .getResource(fileNameWithPath).getFile();
+
+        return new File(filePath);
     }
 }
