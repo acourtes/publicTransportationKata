@@ -24,15 +24,26 @@ public class JourneyPriceCalculator {
     }
 
     public CustomersSummaries getCustomersSummaries() throws UnknownCostException {
-        var firstTap = customersJourneys.tapsList().get(0);
-        var customerId = firstTap.customerId();
-        Trip trip = getTrip(firstTap);
-        var customersSummary = new CustomersSummary(customerId, trip.costInCents(), List.of(trip));
+        int customerId = getCustomerId();
+        var trips = getTrips();
+        var totalCost = getTotalCost(trips);
+        var customersSummary = new CustomersSummary(customerId, totalCost, trips);
 
         return new CustomersSummaries(List.of(customersSummary));
     }
 
-    private Trip getTrip(com.transportation.mapper.domain.Tap firstTap) throws UnknownCostException {
+    private Integer getTotalCost(List<Trip> trips) {
+        return trips.stream()
+                .map(Trip::costInCents)
+                .reduce(0, Integer::sum);
+    }
+
+    private int getCustomerId() {
+        return customersJourneys.tapsList().get(0).customerId();
+    }
+
+    private List<Trip> getTrips() throws UnknownCostException {
+        var firstTap = customersJourneys.tapsList().get(0);
         var startStation = firstTap.station();
         var startedJourneyAt = firstTap.unixTimestamp();
         var secondTap = customersJourneys.tapsList().get(1);
@@ -43,8 +54,8 @@ public class JourneyPriceCalculator {
         var startZone = getStartZone(bestCostRule, startStation);
         var endZone = getEndZone(bestCostRule, endStation);
 
-        return new Trip(startStation, endStation, startedJourneyAt, cost,
-                startZone, endZone);
+        return List.of(new Trip(startStation, endStation, startedJourneyAt, cost,
+                startZone, endZone));
     }
 
     private int getRightZone(List<Integer> zonesFromCostRule, List<Integer> zonesFromStation) {
@@ -65,8 +76,6 @@ public class JourneyPriceCalculator {
     private int getStartZone(CostRule costRule, Stations startStation) {
         return getRightZone(costRule.startZones(), startStation.zoneNumbers);
     }
-
-
 
     private CostRule getCostRules(Stations startStation, Stations endStation) throws UnknownCostException {
         var costRules = CostRuleManager.getCostRules();
