@@ -1,10 +1,15 @@
 package com.transportation.calculator.rules;
 
+import com.transportation.calculator.UnknownCostException;
 import com.transportation.mapper.domain.Stations;
 
+import java.util.Comparator;
 import java.util.List;
 
-import static com.transportation.TransportationConstants.*;
+import static com.transportation.TransportationConstants.ZONE_1;
+import static com.transportation.TransportationConstants.ZONE_2;
+import static com.transportation.TransportationConstants.ZONE_3;
+import static com.transportation.TransportationConstants.ZONE_4;
 
 public final class CostRuleManager {
 
@@ -19,7 +24,20 @@ public final class CostRuleManager {
     public static final List<Integer> ZONES_ONE_AND_TWO = List.of(ZONE_1, ZONE_2);
     public static final List<Integer> ZONES_THREE_AND_FOUR = List.of(ZONE_3, ZONE_4);
 
-    public static List<CostRule> getCostRules() {
+    private CostRuleManager(){}
+
+    public static CostRule getBestCostRuleFor(Stations startStation, Stations endStation)
+            throws UnknownCostException {
+        var costRules = getCostRules();
+
+        return costRules.stream()
+                .filter(costRule -> costRule.stationsRule().test(startStation, endStation))
+                .min(Comparator.comparing(CostRule::cost))
+                .orElseThrow(() -> new UnknownCostException(
+                        "Unknown cost for stations %s and %s".formatted(startStation, endStation)));
+    }
+
+    private static List<CostRule> getCostRules() {
         return List.of(
                 new CostRule(stationsWithInZoneOneAndTwo(),
                         COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2, ZONES_ONE_AND_TWO, ZONES_ONE_AND_TWO),

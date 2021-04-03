@@ -276,6 +276,32 @@ public class JourneyPriceCalculatorTest {
         checkTrip(trips.get(1), expectedCostPerTravel, Stations.D, Stations.A, 1572282000);
     }
 
+    @Test
+    void should_return_480_for_a_return_travel_between_A_and_D_stations_for_one_customer_and_300_for_a_simple_travel_between_I_to_A_stations_for_another_customer() throws UnknownCostException {
+        Taps customersJourneys = getCustomersJourneys("calculator/A_and_D_stations_return_travel_for_one_customer_and_I_and_A_stations_simple_travel_for_another_customer.json");
+        var expectedTotalPriceForCustomer1 = 480;
+        var expectedTotalPriceForCustomer2 = 300;
+        var expectedCostPerTravel = 240;
+
+        CustomersSummaries result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
+
+        assertThat(result).isNotNull();
+        assertThat(result.customersSummariesList()).hasSize(2);
+        should.assertThat(result.customersSummariesList().get(0).totalCostInCents()).isEqualTo(expectedTotalPriceForCustomer1);
+        should.assertThat(result.customersSummariesList().get(0).customerId()).isEqualTo(1);
+        should.assertThat(result.customersSummariesList().get(1).totalCostInCents()).isEqualTo(expectedTotalPriceForCustomer2);
+        should.assertThat(result.customersSummariesList().get(1).customerId()).isEqualTo(2);
+
+        var tripsForCustomer1 = result.customersSummariesList().get(0).trips();
+        should.assertThat(tripsForCustomer1).hasSize(2);
+        checkTrip(tripsForCustomer1.get(0), expectedCostPerTravel, Stations.A, Stations.D, 1572242400);
+        checkTrip(tripsForCustomer1.get(1), expectedCostPerTravel, Stations.D, Stations.A, 1572282000);
+
+        var tripsForCustomer2 = result.customersSummariesList().get(1).trips();
+        should.assertThat(tripsForCustomer2).hasSize(1);
+        checkTrip(tripsForCustomer2.get(0), expectedTotalPriceForCustomer2, Stations.I, Stations.A, 2);
+    }
+
     private Taps getCustomersJourneys(String testFile) {
         var inputFile = TestUtils.getFile(testFile);
         return CustomersInputMapper.from(inputFile).getCustomersJourneys();

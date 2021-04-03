@@ -1,0 +1,34 @@
+{
+  "taps": [
+    {
+      "unixTimestamp": 2,
+      "customerId": 2,
+      "station": "I"
+    },
+    {
+      "unixTimestamp": 4,
+      "customerId": 2,
+      "station": "A"
+    },
+    {
+      "unixTimestamp": 1572242400,
+      "customerId": 1,
+      "station": "A"
+    },
+    {
+      "unixTimestamp": 1572244200,
+      "customerId": 1,
+      "station": "D"
+    },
+    {
+      "unixTimestamp": 1572282000,
+      "customerId": 1,
+      "station": "D"
+    },
+    {
+      "unixTimestamp": 1572283800,
+      "customerId": 1,
+      "station": "A"
+    }
+  ]
+}
