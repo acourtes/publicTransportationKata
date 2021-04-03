@@ -191,6 +191,32 @@ public class JourneyPriceCalculatorTest {
         checkResult(expectedPrice, result, Stations.I, Stations.D, 1, 1);
     }
 
+    @Test
+    void should_return_280_for_a_travel_from_zone_1_to_zone_3_between_A_and_F_stations() throws UnknownCostException {
+        Taps customersJourneys = getCustomersJourneys("calculator/zone_1_to_zone_3_A_and_F_stations.json");
+        var expectedPrice = 280;
+
+        CustomersSummaries result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
+
+        assertThat(result).isNotNull();
+        assertThat(result.customersSummariesList()).hasSize(1);
+
+        checkResult(expectedPrice, result, Stations.A, Stations.F, 1, 1);
+    }
+
+    @Test
+    void should_return_280_for_a_travel_from_zone_2_to_zone_3_between_D_and_F_stations() throws UnknownCostException {
+        Taps customersJourneys = getCustomersJourneys("calculator/zone_2_to_zone_3_D_and_F_stations.json");
+        var expectedPrice = 280;
+
+        CustomersSummaries result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
+
+        assertThat(result).isNotNull();
+        assertThat(result.customersSummariesList()).hasSize(1);
+
+        checkResult(expectedPrice, result, Stations.D, Stations.F, 1, 1);
+    }
+
     private Taps getCustomersJourneys(String testFile) {
         var inputFile = TestUtils.getFile(testFile);
         return CustomersInputMapper.from(inputFile).getCustomersJourneys();
