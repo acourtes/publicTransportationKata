@@ -243,6 +243,19 @@ public class JourneyPriceCalculatorTest {
         checkResult(expectedPrice, result, Stations.D, Stations.H, 1, 1);
     }
 
+    @Test
+    void should_return_200_for_a_travel_between_E_and_C_stations_which_are_both_in_zones_2_and_3() throws UnknownCostException {
+        Taps customersJourneys = getCustomersJourneys("calculator/zone_3_E_and_C_stations.json");
+        var expectedPrice = 200;
+
+        CustomersSummaries result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
+
+        assertThat(result).isNotNull();
+        assertThat(result.customersSummariesList()).hasSize(1);
+
+        checkResult(expectedPrice, result, Stations.E, Stations.C, 1, 1);
+    }
+
     private Taps getCustomersJourneys(String testFile) {
         var inputFile = TestUtils.getFile(testFile);
         return CustomersInputMapper.from(inputFile).getCustomersJourneys();
@@ -261,7 +274,7 @@ public class JourneyPriceCalculatorTest {
         should.assertThat(trip.stationEnd()).isEqualTo(stationEnd);
         should.assertThat(trip.startedJourneyAt()).isEqualTo(expectedStartedJourney);
         should.assertThat(trip.costInCents()).isEqualTo(expectedPrice);
-        should.assertThat(trip.zoneFrom()).isEqualTo(stationStart.zoneNumber);
-        should.assertThat(trip.zoneTo()).isEqualTo(stationEnd.zoneNumber);
+        should.assertThat(trip.zoneFrom()).isIn(stationStart.zoneNumbers);
+        should.assertThat(trip.zoneTo()).isIn(stationEnd.zoneNumbers);
     }
 }

@@ -1,4 +1,7 @@
 package com.transportation.calculator.rules;
 
-public record CostRule(StationsRule stationsRule, int cost) {
+import java.util.List;
+
+public record CostRule(StationsRule stationsRule, Integer cost,
+                       List<Integer> startZones, List<Integer> endZones) {
 }

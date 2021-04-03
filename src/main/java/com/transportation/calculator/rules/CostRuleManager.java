@@ -14,15 +14,25 @@ public final class CostRuleManager {
     private static final int COST_IN_CENTS_FROM_ZONE_4_TO_ZONES_1_OR_2 = 300;
     private static final int COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_3 = 280;
     private static final int COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_4 = 300;
+    public static final List<Integer> ZONE_THREE = List.of(ZONE_3);
+    public static final List<Integer> ZONE_FOUR = List.of(ZONE_4);
+    public static final List<Integer> ZONES_ONE_AND_TWO = List.of(ZONE_1, ZONE_2);
+    public static final List<Integer> ZONES_THREE_AND_FOUR = List.of(ZONE_3, ZONE_4);
 
     public static List<CostRule> getCostRules() {
         return List.of(
-                new CostRule(stationsWithInZoneOneAndTwo(), COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2),
-                new CostRule(stationsWithInZoneThreeAndFour(), COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4),
-                new CostRule(startStationInZoneThreeToStationInZoneOneOrTwo(), COST_IN_CENTS_FROM_ZONE_3_TO_ZONES_1_OR_2),
-                new CostRule(startStationInZoneFourToStationInZoneOneOrTwo(), COST_IN_CENTS_FROM_ZONE_4_TO_ZONES_1_OR_2),
-                new CostRule(startStationInZoneOneOrTwoToStationInZoneThree(), COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_3),
-                new CostRule(startStationInZoneOneOrTwoToStationInZoneFour(), COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_4));
+                new CostRule(stationsWithInZoneOneAndTwo(),
+                        COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2, ZONES_ONE_AND_TWO, ZONES_ONE_AND_TWO),
+                new CostRule(stationsWithInZoneThreeAndFour(),
+                        COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4, ZONES_THREE_AND_FOUR, ZONES_THREE_AND_FOUR),
+                new CostRule(startStationInZoneThreeToStationInZoneOneOrTwo(),
+                        COST_IN_CENTS_FROM_ZONE_3_TO_ZONES_1_OR_2, ZONE_THREE, ZONES_ONE_AND_TWO),
+                new CostRule(startStationInZoneFourToStationInZoneOneOrTwo(),
+                        COST_IN_CENTS_FROM_ZONE_4_TO_ZONES_1_OR_2, ZONE_FOUR, ZONES_ONE_AND_TWO),
+                new CostRule(startStationInZoneOneOrTwoToStationInZoneThree(),
+                        COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_3, ZONES_ONE_AND_TWO, ZONE_THREE),
+                new CostRule(startStationInZoneOneOrTwoToStationInZoneFour(),
+                        COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_4, ZONES_ONE_AND_TWO, ZONE_FOUR));
     }
 
     private static StationsRule stationsWithInZoneOneAndTwo() {
