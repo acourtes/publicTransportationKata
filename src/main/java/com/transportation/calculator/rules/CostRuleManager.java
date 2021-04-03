@@ -13,6 +13,7 @@ public final class CostRuleManager {
     private static final int COST_IN_CENTS_FROM_ZONE_3_TO_ZONES_1_OR_2 = 280;
     private static final int COST_IN_CENTS_FROM_ZONE_4_TO_ZONES_1_OR_2 = 300;
     private static final int COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_3 = 280;
+    private static final int COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_4 = 300;
 
     public static List<CostRule> getCostRules() {
         return List.of(
@@ -20,7 +21,8 @@ public final class CostRuleManager {
                 new CostRule(stationsWithInZoneThreeAndFour(), COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4),
                 new CostRule(startStationInZoneThreeToStationInZoneOneOrTwo(), COST_IN_CENTS_FROM_ZONE_3_TO_ZONES_1_OR_2),
                 new CostRule(startStationInZoneFourToStationInZoneOneOrTwo(), COST_IN_CENTS_FROM_ZONE_4_TO_ZONES_1_OR_2),
-                new CostRule(startStationInZoneOneOrTwoToStationInZoneThree(), COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_3));
+                new CostRule(startStationInZoneOneOrTwoToStationInZoneThree(), COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_3),
+                new CostRule(startStationInZoneOneOrTwoToStationInZoneFour(), COST_IN_CENTS_FROM_ZONE_1_OR_2_TO_ZONE_4));
     }
 
     private static StationsRule stationsWithInZoneOneAndTwo() {
@@ -51,6 +53,12 @@ public final class CostRuleManager {
         return (startStation, endStation) ->
                 isStationInZones(startStation, ZONE_1, ZONE_2)
                         && endStation.isInZone(ZONE_3);
+    }
+
+    private static StationsRule startStationInZoneOneOrTwoToStationInZoneFour() {
+        return (startStation, endStation) ->
+                isStationInZones(startStation, ZONE_1, ZONE_2)
+                        && endStation.isInZone(ZONE_4);
     }
 
     private static boolean isStationInZones(Stations station, int firstZone, int secondZone) {

@@ -3,7 +3,7 @@ package com.transportation.mapper.domain;
 public enum Stations {
     A(1), B(1), D(2),
     E(2), F(3), G(4),
-    I(4),
+    H(4), I(4),
     UNKNOWN(8);
 
     public final int zoneNumber;
