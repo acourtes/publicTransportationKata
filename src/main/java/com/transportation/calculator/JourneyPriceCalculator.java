@@ -8,6 +8,7 @@ import com.transportation.calculator.rules.CostRuleManager;
 import com.transportation.mapper.domain.Stations;
 import com.transportation.mapper.domain.Taps;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,19 +44,24 @@ public class JourneyPriceCalculator {
     }
 
     private List<Trip> getTrips() throws UnknownCostException {
-        var firstTap = customersJourneys.tapsList().get(0);
-        var startStation = firstTap.station();
-        var startedJourneyAt = firstTap.unixTimestamp();
-        var secondTap = customersJourneys.tapsList().get(1);
-        var endStation = secondTap.station();
+        List<Trip> trips = new ArrayList<>(customersJourneys.tapsList().size() / 2);
+        for (int i = 0; i < customersJourneys.tapsList().size(); i += 2) {
+            var firstTap = customersJourneys.tapsList().get(i);
+            var startStation = firstTap.station();
+            var startedJourneyAt = firstTap.unixTimestamp();
+            var secondTap = customersJourneys.tapsList().get(i + 1);
+            var endStation = secondTap.station();
 
-        var bestCostRule = getCostRules(startStation, endStation);
-        int cost = bestCostRule.cost();
-        var startZone = getStartZone(bestCostRule, startStation);
-        var endZone = getEndZone(bestCostRule, endStation);
+            var bestCostRule = getCostRules(startStation, endStation);
+            int cost = bestCostRule.cost();
+            var startZone = getStartZone(bestCostRule, startStation);
+            var endZone = getEndZone(bestCostRule, endStation);
 
-        return List.of(new Trip(startStation, endStation, startedJourneyAt, cost,
-                startZone, endZone));
+            trips.add(new Trip(startStation, endStation, startedJourneyAt, cost,
+                    startZone, endZone));
+        }
+
+        return trips;
     }
 
     private int getRightZone(List<Integer> zonesFromCostRule, List<Integer> zonesFromStation) {
