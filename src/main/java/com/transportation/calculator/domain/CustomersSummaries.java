@@ -1,4 +1,4 @@
-package com.transportation.calculator;
+package com.transportation.calculator.domain;
 
 import java.util.List;
 

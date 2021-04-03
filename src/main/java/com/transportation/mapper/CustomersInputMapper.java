@@ -2,7 +2,7 @@ package com.transportation.mapper;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.transportation.mapper.model.Taps;
+import com.transportation.mapper.domain.Taps;
 
 import java.io.File;
 import java.io.IOException;

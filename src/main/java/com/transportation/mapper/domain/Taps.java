@@ -1,4 +1,4 @@
-package com.transportation.mapper.model;
+package com.transportation.mapper.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

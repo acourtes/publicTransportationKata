@@ -1,19 +1,17 @@
 package com.transportation.calculator;
 
-import com.transportation.mapper.model.Stations;
-import com.transportation.mapper.model.Taps;
+import com.transportation.calculator.domain.CustomersSummaries;
+import com.transportation.calculator.domain.CustomersSummary;
+import com.transportation.calculator.domain.Trip;
+import com.transportation.calculator.rules.CostRule;
+import com.transportation.calculator.rules.CostRuleManager;
+import com.transportation.mapper.domain.Stations;
+import com.transportation.mapper.domain.Taps;
 
 import java.util.List;
 
-import static com.transportation.TransportationConstants.ZONE_1;
-import static com.transportation.TransportationConstants.ZONE_2;
-import static com.transportation.TransportationConstants.ZONE_3;
-import static com.transportation.TransportationConstants.ZONE_4;
-
 public class JourneyPriceCalculator {
 
-    public static final int COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2 = 240;
-    public static final int COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4 = 200;
     private final Taps customersJourneys;
 
     private JourneyPriceCalculator(Taps customersJourneys) {
@@ -24,7 +22,7 @@ public class JourneyPriceCalculator {
         return new JourneyPriceCalculator(customersJourneys);
     }
 
-    public CustomersSummaries getCustomersSummaries() {
+    public CustomersSummaries getCustomersSummaries() throws UnknownCostException {
         var firstTap = customersJourneys.tapsList().get(0);
         var startStation = firstTap.station();
         var customerId = firstTap.customerId();
@@ -41,22 +39,15 @@ public class JourneyPriceCalculator {
         return new CustomersSummaries(List.of(customersSummary));
     }
 
-    private int getCost(Stations startStation, Stations endStation) {
-        int cost = 0;
-        var startStationIsOneOrTwo = isStationInZones(startStation, ZONE_1, ZONE_2);
-        var endStationIsOneOrTwo = isStationInZones(endStation, ZONE_1, ZONE_2);
-        var startStationIsThreeOrFour = isStationInZones(startStation, ZONE_3, ZONE_4);
-        var endStationIsThreeOrFour = isStationInZones(endStation, ZONE_3, ZONE_4);
+    private int getCost(Stations startStation, Stations endStation) throws UnknownCostException {
+        var costRules = CostRuleManager.getCostRules();
 
-        if (startStationIsOneOrTwo && endStationIsOneOrTwo) {
-            cost = COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2;
-        } else if (startStationIsThreeOrFour && endStationIsThreeOrFour) {
-            cost = COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4;
-        }
-        return cost;
-    }
-
-    private boolean isStationInZones(Stations startStation, int firstZone, int secondZone) {
-        return startStation.zoneNumber == firstZone || startStation.zoneNumber == secondZone;
+        return costRules.stream()
+                .filter(costRule -> costRule.stationsRule().test(startStation, endStation))
+                .map(CostRule::cost)
+                .findFirst()
+                .orElseThrow(()
+                        -> new UnknownCostException(
+                                "Unknown cost for stations %s and %s".formatted(startStation, endStation)));
     }
 }

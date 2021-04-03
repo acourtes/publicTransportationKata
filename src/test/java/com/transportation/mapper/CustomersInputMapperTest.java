@@ -1,9 +1,9 @@
 package com.transportation.mapper;
 
 import com.transportation.TestUtils;
-import com.transportation.mapper.model.Stations;
-import com.transportation.mapper.model.Tap;
-import com.transportation.mapper.model.Taps;
+import com.transportation.mapper.domain.Stations;
+import com.transportation.mapper.domain.Tap;
+import com.transportation.mapper.domain.Taps;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 

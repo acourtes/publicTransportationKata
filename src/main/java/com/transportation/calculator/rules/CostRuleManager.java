@@ -1,0 +1,46 @@
+package com.transportation.calculator.rules;
+
+import com.transportation.mapper.domain.Stations;
+
+import java.util.List;
+
+import static com.transportation.TransportationConstants.ZONE_1;
+import static com.transportation.TransportationConstants.ZONE_2;
+import static com.transportation.TransportationConstants.ZONE_3;
+import static com.transportation.TransportationConstants.ZONE_4;
+
+public final class CostRuleManager {
+
+    private static final int COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2 = 240;
+    private static final int COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4 = 200;
+    private static final int COST_IN_CENTS_FROM_ZONE_3_TO_ZONES_1_OR_2 = 280;
+
+    public static List<CostRule> getCostRules() {
+        return List.of(new CostRule(stationsWithInZoneOneAndTwo(), COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_1_AND_2),
+                new CostRule(stationsWithInZoneThreeAndFour(), COST_IN_CENTS_FOR_JOURNEY_WITHIN_ZONES_3_AND_4),
+                new CostRule(startStationInZoneThreeToStationInZoneOneOrTwo(), COST_IN_CENTS_FROM_ZONE_3_TO_ZONES_1_OR_2));
+    }
+
+    private static StationsRule stationsWithInZoneOneAndTwo() {
+        return (startStation, endStation) ->
+                isStationInZones(startStation, ZONE_1, ZONE_2)
+                        && isStationInZones(endStation, ZONE_1, ZONE_2);
+    }
+
+    private static StationsRule stationsWithInZoneThreeAndFour() {
+        return (startStation, endStation) ->
+                isStationInZones(startStation, ZONE_3, ZONE_4)
+                        && isStationInZones(endStation, ZONE_3, ZONE_4);
+    }
+
+    private static StationsRule startStationInZoneThreeToStationInZoneOneOrTwo() {
+        return (startStation, endStation) ->
+                startStation.isInZone(ZONE_3)
+                        && isStationInZones(endStation, ZONE_1, ZONE_2);
+    }
+
+    private static boolean isStationInZones(Stations station, int firstZone, int secondZone) {
+        return station.isInZone(firstZone) || station.isInZone(secondZone);
+    }
+
+}
