@@ -1,5 +1,5 @@
 {
-  "customersSummariesList" : [ {
+  "customerSummaries" : [ {
     "customerId" : 1,
     "totalCostInCents" : 200,
     "trips" : [ {

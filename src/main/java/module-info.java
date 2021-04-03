@@ -7,4 +7,5 @@ module publicTransportationKataModule {
     opens com.transportation.calculator.domain;
     opens com.transportation.calculator.rules;
     opens com.transportation.utils;
+    opens com.transportation;
 }

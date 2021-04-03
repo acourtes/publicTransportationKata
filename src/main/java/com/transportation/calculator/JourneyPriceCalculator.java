@@ -1,7 +1,7 @@
 package com.transportation.calculator;
 
-import com.transportation.calculator.domain.CustomersSummaries;
-import com.transportation.calculator.domain.CustomersSummary;
+import com.transportation.calculator.domain.CustomerSummariesList;
+import com.transportation.calculator.domain.CustomerSummary;
 import com.transportation.calculator.domain.Trip;
 import com.transportation.mapper.domain.Tap;
 import com.transportation.mapper.domain.Taps;
@@ -23,19 +23,19 @@ public class JourneyPriceCalculator {
         return new JourneyPriceCalculator(customersJourneys);
     }
 
-    public CustomersSummaries getCustomersSummaries() throws UnknownCostException {
+    public CustomerSummariesList getCustomersSummaries() throws UnknownCostException {
         var tapsByCustomerId = TapsUtils.getTapsByCustomerId(customersJourneys.tapsList());
-        final List<CustomersSummary> customersSummaries = new ArrayList<>(tapsByCustomerId.size());
+        final List<CustomerSummary> customersSummaries = new ArrayList<>(tapsByCustomerId.size());
 
         for (Map.Entry<Integer, List<Tap>> entry : tapsByCustomerId.entrySet()) {
             int customerId = entry.getKey();
             List<Trip> trips = TapsUtils.getTripsFromTaps(entry.getValue());
             var totalCost = getTotalCost(trips);
-            var customersSummary = new CustomersSummary(customerId, totalCost, trips);
+            var customersSummary = new CustomerSummary(customerId, totalCost, trips);
             customersSummaries.add(customersSummary);
         }
 
-        return new CustomersSummaries(customersSummaries);
+        return new CustomerSummariesList(customersSummaries);
     }
 
     private Integer getTotalCost(List<Trip> trips) {

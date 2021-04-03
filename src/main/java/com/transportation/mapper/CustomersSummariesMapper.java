@@ -1,7 +1,7 @@
 package com.transportation.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.transportation.calculator.domain.CustomersSummaries;
+import com.transportation.calculator.domain.CustomerSummariesList;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +10,13 @@ public class CustomersSummariesMapper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private final CustomersSummaries customersSummaries;
+    private final CustomerSummariesList customersSummaries;
 
-    private CustomersSummariesMapper(CustomersSummaries customersSummaries) {
+    private CustomersSummariesMapper(CustomerSummariesList customersSummaries) {
         this.customersSummaries = customersSummaries;
     }
 
-    public static CustomersSummariesMapper from(CustomersSummaries customersSummaries) {
+    public static CustomersSummariesMapper from(CustomerSummariesList customersSummaries) {
         return new CustomersSummariesMapper(customersSummaries);
     }
 
