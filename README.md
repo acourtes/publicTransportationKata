@@ -122,22 +122,18 @@ The output file has the following format:
       "trips": [
         {
           "stationStart": "A",
-          "stationEnd: "
-          D
-          ",
+          "stationEnd": "D",
           "startedJourneyAt": 1572242400,
           "costInCents": 240,
-          "zoneFrom": 1
+          "zoneFrom": 1,
           "zoneTo": 2
         },
         {
           "stationStart": "D",
-          "stationEnd: "
-          A
-          ",
+          "stationEnd": "A",
           "startedJourneyAt": 1572282000,
           "costInCents": 240,
-          "zoneFrom": 2
+          "zoneFrom": 2,
           "zoneTo": 1
         }
       ]
@@ -159,3 +155,23 @@ For each of the customers' trips we output the following:
 4) "costInCents" - the cost of the journey in cents.
 5) "zoneFrom" the zone which the user was charged from.
 6) "zoneTo" - the zone which the user was charged to.
+
+## Requirements for compiling and launching the application
+This appliction uses Record new feature from Java 16 so you will
+need Java 16 to compile and execute it.
+
+To package the application, just launch:
+```shell
+mvn clean package
+```
+
+You will have 2 jar files :
+* One without dependencies
+* One with integrated dependencies with suffix : jar-with-dependencies
+
+For execution, classical way of doing:
+```shell
+java -jar kata-1.0-SNAPSHOT-jar-with-dependencies.jar path/to/inputFile.json path/to/outputFile.json
+```
+
+Enjoy !
