@@ -15,6 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class JourneyPriceCalculatorTest {
+
+    private static final int ZONE_1 = 1;
+    private static final int ZONE_2 = 2;
+    private static final int ZONE_3 = 3;
+    private static final int ZONE_4 = 4;
+    private static final int CUSTOMER_ID_1 = 1;
+
     private SoftAssertions should;
 
     @BeforeEach
@@ -37,7 +44,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.B, 1, 1);
+        checkResult(result, expectedPrice, Stations.A, Stations.B, CUSTOMER_ID_1, 1, ZONE_1, ZONE_1);
     }
 
     @Test
@@ -50,7 +57,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.B, Stations.A, 1, 1);
+        checkResult(result, expectedPrice, Stations.B, Stations.A, CUSTOMER_ID_1, 1, ZONE_1, ZONE_1);
     }
 
     @Test
@@ -63,7 +70,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.D, 1, 1);
+        checkResult(result, expectedPrice, Stations.A, Stations.D, CUSTOMER_ID_1, 1, ZONE_1, ZONE_2);
     }
 
     @Test
@@ -76,20 +83,21 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.E, 1, 1);
+        checkResult(result, expectedPrice, Stations.A, Stations.E, CUSTOMER_ID_1, 1, ZONE_1, ZONE_2);
     }
 
     @Test
     void should_return_240_for_a_travel_in_zones_1_and_2_between_A_and_E_stations_with_customer_id_2() throws UnknownCostException {
         Taps customersJourneys = getCustomersJourneys("calculator/zones_1_and_2_A_and_E_stations_customer_id_2.json");
         var expectedPrice = 240;
+        var expectedCustomerId2 = 2;
 
         CustomerSummariesList result = JourneyPriceCalculator.from(customersJourneys).getCustomersSummaries();
 
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.E, 2, 1);
+        checkResult(result, expectedPrice, Stations.A, Stations.E, expectedCustomerId2, 1, ZONE_1, ZONE_2);
     }
 
     @Test
@@ -102,7 +110,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.E, 1, 3);
+        checkResult(result, expectedPrice, Stations.A, Stations.E, CUSTOMER_ID_1, 3, ZONE_1, ZONE_2);
     }
 
     @Test
@@ -115,7 +123,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.F, Stations.G, 1, 1);
+        checkResult(result, expectedPrice, Stations.F, Stations.G, CUSTOMER_ID_1, 1, ZONE_3, ZONE_4);
     }
 
     @Test
@@ -128,7 +136,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.G, Stations.F, 1, 1);
+        checkResult(result, expectedPrice, Stations.G, Stations.F, CUSTOMER_ID_1, 1, ZONE_4, ZONE_3);
     }
 
     @Test
@@ -141,7 +149,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.F, Stations.D, 1, 1);
+        checkResult(result, expectedPrice, Stations.F, Stations.D, CUSTOMER_ID_1, 1, ZONE_3, ZONE_2);
     }
 
     @Test
@@ -163,7 +171,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.F, Stations.A, 1, 1);
+        checkResult(result, expectedPrice, Stations.F, Stations.A, CUSTOMER_ID_1, 1, ZONE_3, ZONE_1);
     }
 
     @Test
@@ -176,7 +184,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.I, Stations.A, 1, 1);
+        checkResult(result, expectedPrice, Stations.I, Stations.A, CUSTOMER_ID_1, 1, ZONE_4, ZONE_1);
     }
 
     @Test
@@ -189,7 +197,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.I, Stations.D, 1, 1);
+        checkResult(result, expectedPrice, Stations.I, Stations.D, CUSTOMER_ID_1, 1, ZONE_4, ZONE_2);
     }
 
     @Test
@@ -202,7 +210,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.F, 1, 1);
+        checkResult(result, expectedPrice, Stations.A, Stations.F, CUSTOMER_ID_1, 1, ZONE_1, ZONE_3);
     }
 
     @Test
@@ -215,7 +223,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.D, Stations.F, 1, 1);
+        checkResult(result, expectedPrice, Stations.D, Stations.F, CUSTOMER_ID_1, 1, ZONE_2, ZONE_3);
     }
 
     @Test
@@ -228,7 +236,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.A, Stations.H, 1, 1);
+        checkResult(result, expectedPrice, Stations.A, Stations.H, CUSTOMER_ID_1, 1, ZONE_1, ZONE_4);
     }
 
     @Test
@@ -241,7 +249,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.D, Stations.H, 1, 1);
+        checkResult(result, expectedPrice, Stations.D, Stations.H, CUSTOMER_ID_1, 1, ZONE_2, ZONE_4);
     }
 
     @Test
@@ -254,7 +262,7 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
 
-        checkResult(result, expectedPrice, Stations.E, Stations.C, 1, 1);
+        checkResult(result, expectedPrice, Stations.E, Stations.C, CUSTOMER_ID_1, 1, ZONE_3, ZONE_3);
     }
 
     @Test
@@ -268,12 +276,12 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(1);
         should.assertThat(result.customerSummaries().get(0).totalCostInCents()).isEqualTo(expectedTotalPrice);
-        should.assertThat(result.customerSummaries().get(0).customerId()).isEqualTo(1);
+        should.assertThat(result.customerSummaries().get(0).customerId()).isEqualTo(CUSTOMER_ID_1);
 
         var trips = result.customerSummaries().get(0).trips();
         should.assertThat(trips).hasSize(2);
-        checkTrip(trips.get(0), expectedCostPerTravel, Stations.A, Stations.D, 1572242400);
-        checkTrip(trips.get(1), expectedCostPerTravel, Stations.D, Stations.A, 1572282000);
+        checkTrip(trips.get(0), expectedCostPerTravel, Stations.A, Stations.D, 1572242400, ZONE_1, ZONE_2);
+        checkTrip(trips.get(1), expectedCostPerTravel, Stations.D, Stations.A, 1572282000, ZONE_2, ZONE_1);
     }
 
     @Test
@@ -288,18 +296,18 @@ public class JourneyPriceCalculatorTest {
         assertThat(result).isNotNull();
         assertThat(result.customerSummaries()).hasSize(2);
         should.assertThat(result.customerSummaries().get(0).totalCostInCents()).isEqualTo(expectedTotalPriceForCustomer1);
-        should.assertThat(result.customerSummaries().get(0).customerId()).isEqualTo(1);
+        should.assertThat(result.customerSummaries().get(0).customerId()).isEqualTo(CUSTOMER_ID_1);
         should.assertThat(result.customerSummaries().get(1).totalCostInCents()).isEqualTo(expectedTotalPriceForCustomer2);
         should.assertThat(result.customerSummaries().get(1).customerId()).isEqualTo(2);
 
         var tripsForCustomer1 = result.customerSummaries().get(0).trips();
         should.assertThat(tripsForCustomer1).hasSize(2);
-        checkTrip(tripsForCustomer1.get(0), expectedCostPerTravel, Stations.A, Stations.D, 1572242400);
-        checkTrip(tripsForCustomer1.get(1), expectedCostPerTravel, Stations.D, Stations.A, 1572282000);
+        checkTrip(tripsForCustomer1.get(0), expectedCostPerTravel, Stations.A, Stations.D, 1572242400, ZONE_1, ZONE_2);
+        checkTrip(tripsForCustomer1.get(1), expectedCostPerTravel, Stations.D, Stations.A, 1572282000, ZONE_2, ZONE_1);
 
         var tripsForCustomer2 = result.customerSummaries().get(1).trips();
         should.assertThat(tripsForCustomer2).hasSize(1);
-        checkTrip(tripsForCustomer2.get(0), expectedTotalPriceForCustomer2, Stations.I, Stations.A, 2);
+        checkTrip(tripsForCustomer2.get(0), expectedTotalPriceForCustomer2, Stations.I, Stations.A, 2, ZONE_4, ZONE_1);
     }
 
     private Taps getCustomersJourneys(String testFile) {
@@ -309,23 +317,27 @@ public class JourneyPriceCalculatorTest {
 
     private void checkResult(CustomerSummariesList result, int expectedPrice,
                              Stations stationStart, Stations stationEnd,
-                             int expectedCustomerId, int expectedStartedJourney) {
+                             int expectedCustomerId, int expectedStartedJourney,
+                             int expectedZoneFrom, int expectedZoneTo) {
         var customersSummary = result.customerSummaries().get(0);
         should.assertThat(customersSummary.customerId()).isEqualTo(expectedCustomerId);
         should.assertThat(customersSummary.totalCostInCents()).isEqualTo(expectedPrice);
         should.assertThat(customersSummary.trips()).hasSize(1);
 
         var trip = customersSummary.trips().get(0);
-        checkTrip(trip, expectedPrice, stationStart, stationEnd, expectedStartedJourney);
+        checkTrip(trip, expectedPrice, stationStart, stationEnd, expectedStartedJourney,
+                expectedZoneFrom, expectedZoneTo);
     }
 
     private void checkTrip(Trip trip, int expectedPrice, Stations stationStart, Stations stationEnd,
-                           int expectedStartedJourney) {
+                           int expectedStartedJourney, int expectedZoneFrom, int expectedZoneTo) {
         should.assertThat(trip.stationStart()).isEqualTo(stationStart);
         should.assertThat(trip.stationEnd()).isEqualTo(stationEnd);
         should.assertThat(trip.startedJourneyAt()).isEqualTo(expectedStartedJourney);
         should.assertThat(trip.costInCents()).isEqualTo(expectedPrice);
         should.assertThat(trip.zoneFrom()).isIn(stationStart.zoneNumbers);
+        should.assertThat(trip.zoneFrom()).isEqualTo(expectedZoneFrom);
         should.assertThat(trip.zoneTo()).isIn(stationEnd.zoneNumbers);
+        should.assertThat(trip.zoneTo()).isEqualTo(expectedZoneTo);
     }
 }
